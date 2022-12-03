@@ -4,6 +4,8 @@ GIVE EXPLANATION OF WHAT THIS DOC DOES
 import random
 import simpy
 import numpy as np
+import scipy.stats as st
+import plotting
 
 class Servers(object):
     """
@@ -32,13 +34,12 @@ def customer(env, name, s, wait_times):
         yield request
         end_wait = env.now
         #print('%s served at %.2f.' % (name, env.now))
-        wait_time = [end_wait - start_wait]
+        wait_time = end_wait - start_wait
         # Record witing time
         wait_times.append(wait_time)
 
         yield env.process(s.serve(name))
         #print('%s leaves at %.2f.' % (name, env.now))
-
 
 
 def setup(env, num_servers, num_customers, capacity, arrival_rate, wait_times):
@@ -61,9 +62,13 @@ def setup(env, num_servers, num_customers, capacity, arrival_rate, wait_times):
 
 
 def run_simulation(num_servers, num_simulations, num_customers, capacity, arrival_rate):
-    avg_wait_times = np.zeros((len(num_servers), num_simulations))
+    """
 
+    """
+    avg_wait_times = np.empty((len(num_servers), num_simulations))
+    wait_times_cust = []
     for idx_n in range(len(num_servers)):
+        wait_times_cust_n = []
         for sim in range(num_simulations):
             wait_times = []
             arrival_rate_n = arrival_rate * num_servers[idx_n]
@@ -73,16 +78,8 @@ def run_simulation(num_servers, num_simulations, num_customers, capacity, arriva
             # Execute!
             env.run()
             avg_wait_times[idx_n][sim] = np.mean(wait_times)
+            wait_times_cust_n.append(wait_times)
+        wait_times_cust.append(wait_times_cust_n)
+    wait_times_cust = np.array(wait_times_cust)
 
-    return avg_wait_times
-
-num_servers = [1,2,4]
-num_simulations = 100
-num_customers = 50
-capacity = 2
-arrival_rate = 1.9
-avg_wait_times = run_simulation(num_servers, num_simulations, num_customers, capacity, arrival_rate)
-
-# Results
-mean_over_sim = [np.mean(result_n_servers) for result_n_servers in avg_wait_times]
-print(mean_over_sim)
+    return avg_wait_times, wait_times_cust
