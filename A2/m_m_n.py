@@ -5,7 +5,7 @@ import random
 import simpy
 import numpy as np
 import scipy.stats as st
-import plotting
+# import plotting
 
 class Servers(object):
     """
