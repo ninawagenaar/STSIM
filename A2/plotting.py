@@ -21,12 +21,13 @@ def plot_dep_customers(num_servers, num_customers, wait_times_cust):
         line, = plt.plot(xdata, avg_ydata, label = f"number of servers =  {n}")
         plt.fill_between(xdata, ci_lower, ci_higher, color=line.get_color(), alpha=0.2)
         plt.legend()
-        plt.gca().yaxis.grid()
 
+    plt.gca().yaxis.grid()
     plt.title("Relation between number of customers and average wait time") 
     plt.xlabel("Queue position customer")
     plt.ylabel("Average waiting time")
-    plt.show()  
+
+    plt.show()
 
 
 def plot_dep_servers_box(num_servers, avg_wait_times):
@@ -36,12 +37,17 @@ def plot_dep_servers_box(num_servers, avg_wait_times):
     plt.title("Relation between number of servers and average wait time")
     plt.xlabel("Number of servers")
     plt.ylabel("Average waiting time")
+
     ax = plt.boxplot(avg_wait_times.T, patch_artist=True, labels=num_servers)
     # fill with colors
     colors = ['pink', 'lightblue', 'lightgreen']
     for patch, color in zip(ax['boxes'], colors):
          patch.set_facecolor(color)
-    plt.show()  
+
+    plt.gca().yaxis.grid()
+    plt.show()
+
+
 
 def plot_dep_rho(num_servers, rhos, avg_wait_times):
     """
@@ -61,12 +67,14 @@ def plot_dep_rho(num_servers, rhos, avg_wait_times):
         line, = plt.plot(xdata, avg_ydata, label = f"number of servers =  {n}")
         plt.fill_between(xdata, ci_lower, ci_higher, color=line.get_color(), alpha=0.2)
         plt.legend()
-        plt.gca().yaxis.grid()
 
     plt.title("Relation between Rho and average wait time") 
     plt.xlabel("Rho")
     plt.ylabel("Average waiting time")
-    plt.show()  
+
+    plt.gca().yaxis.grid()
+    plt.show()
+
 
 def plot_dep_queue_struct(num_servers, avg_wait_times_FIFO, avg_wait_times_SJFS):
     """
@@ -86,27 +94,34 @@ def plot_dep_queue_struct(num_servers, avg_wait_times_FIFO, avg_wait_times_SJFS)
         colors = ['pink', 'lightblue']
         for patch, color in zip(ax['boxes'], colors):
             patch.set_facecolor(color)
+
+        plt.gca().yaxis.grid()
         plt.show()
 
-def plot_dep_queue_type(num_servers, avg_wait_times_m_m_n, avg_wait_times_m_d_n):
+
+def plot_dep_queue_type(num_servers, avg_wait_times_m_m_n, avg_wait_times_m_d_n, avg_wait_times_lt, structure):
     """
 
     """
-    labels = ["m_m_n", "m_m_d"]
+    labels = ["m_m_n", "m_m_d", "long-tailed"]
 
     for idx_n in range(len(num_servers)):
-        data = np.array([avg_wait_times_m_m_n[idx_n], avg_wait_times_m_d_n[idx_n]])
-        plt.title(f"Comparison of queue types using {num_servers[idx_n]} servers")
+        data = np.array([avg_wait_times_m_m_n[idx_n], avg_wait_times_m_d_n[idx_n], avg_wait_times_lt[idx_n]])
+        plt.title(f"Comparison of queue types using {num_servers[idx_n]} servers and a {structure} structure")
         plt.xlabel("Queue type")
         plt.ylabel("Average waiting time")
 
         ax = plt.boxplot(data.T, patch_artist=True, labels=labels)
 
         # fill with colors
-        colors = ['pink', 'lightblue']
+        colors = ['pink', 'lightblue', 'lightgreen']
         for patch, color in zip(ax['boxes'], colors):
             patch.set_facecolor(color)
+
+        plt.gca().yaxis.grid()
         plt.show()
+
+        
 
 
 
