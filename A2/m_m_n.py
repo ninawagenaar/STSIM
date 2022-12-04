@@ -5,7 +5,7 @@ import random
 import simpy
 import numpy as np
 import scipy.stats as st
-# import plotting
+import plotting
 
 class Servers(object):
     """
@@ -13,8 +13,9 @@ class Servers(object):
     """
     def __init__(self, env, num_servers, capacity):
         self.env = env
-        self.machine = simpy.Resource(env, num_servers)
+        self.machine = simpy.PriorityResource(env, num_servers)
         self.capacity = capacity
+        self.servetime = None
 
     def serve(self, name):
         """
@@ -23,12 +24,24 @@ class Servers(object):
         servetime = random.expovariate(self.capacity)
         yield self.env.timeout(servetime)
 
+    def set_servetime(self):
+        self.servetime = random.expovariate(self.capacity)
 
-def customer(env, name, s, wait_times):
+
+
+def customer(env, name, s, wait_times, queue_type):
     """
 
     """
-    with s.machine.request() as request:
+    s.set_servetime()
+    servetime = s.servetime
+
+    if queue_type == "SJFS":
+        priority = servetime
+    else:
+        priority = None
+
+    with s.machine.request(priority) as request:
         start_wait = env.now
         #print('%s enters the at %.2f.' % (name, env.now))
         yield request
@@ -38,11 +51,11 @@ def customer(env, name, s, wait_times):
         # Record witing time
         wait_times.append(wait_time)
 
-        yield env.process(s.serve(name))
+        yield env.timeout(servetime)
         #print('%s leaves at %.2f.' % (name, env.now))
 
 
-def setup(env, num_servers, num_customers, capacity, arrival_rate, wait_times):
+def setup(env, num_servers, num_customers, capacity, arrival_rate, wait_times, queue_type):
     """
 
     """
@@ -51,17 +64,17 @@ def setup(env, num_servers, num_customers, capacity, arrival_rate, wait_times):
 
     # Create n initial customers
     for i in range(num_servers):
-        env.process(customer(env, 'Customer %d' % i, servers, wait_times))
+        env.process(customer(env, 'Customer %d' % i, servers, wait_times, queue_type))
 
     # Create more cars while the sicapacitylation is running
     for i in range(num_servers, num_customers):
         arrival_time = random.expovariate(arrival_rate)
         yield env.timeout(arrival_time)
         i += 1
-        env.process(customer(env, 'Customer %d' % i, servers, wait_times))
+        env.process(customer(env, 'Customer %d' % i, servers, wait_times, queue_type))
 
 
-def run_simulation(num_servers, num_simulations, num_customers, capacity, arrival_rate):
+def run_simulation(num_servers, num_simulations, num_customers, capacity, arrival_rate, queue_type = "FIFO"):
     """
 
     """
@@ -74,12 +87,12 @@ def run_simulation(num_servers, num_simulations, num_customers, capacity, arriva
             arrival_rate_n = arrival_rate * num_servers[idx_n]
             # Create an environment and start the setup process
             env = simpy.Environment()
-            env.process(setup(env, num_servers[idx_n], num_customers, capacity, arrival_rate_n, wait_times))
+            env.process(setup(env, num_servers[idx_n], num_customers, capacity, arrival_rate_n, wait_times, queue_type))
             # Execute!
             env.run()
             avg_wait_times[idx_n][sim] = np.mean(wait_times)
             wait_times_cust_n.append(wait_times)
         wait_times_cust.append(wait_times_cust_n)
-    wait_times_cust = np.array(wait_times_cust)
 
+    wait_times_cust = np.array(wait_times_cust)
     return avg_wait_times, wait_times_cust
