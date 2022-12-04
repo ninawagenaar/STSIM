@@ -4,6 +4,9 @@ import scipy.stats as st
 import seaborn as sns
 
 def plot_dep_customers(num_servers, num_customers, wait_times_cust):
+    """
+
+    """
     for idx_n in range(len(num_servers)):
         n = num_servers[idx_n]
         xdata = np.arange(0, num_customers)
@@ -27,6 +30,9 @@ def plot_dep_customers(num_servers, num_customers, wait_times_cust):
 
 
 def plot_dep_servers_box(num_servers, avg_wait_times):
+    """
+
+    """
     plt.title("Relation between number of servers and average wait time")
     plt.xlabel("Number of servers")
     plt.ylabel("Average wait time")
@@ -38,6 +44,9 @@ def plot_dep_servers_box(num_servers, avg_wait_times):
     plt.show()  
 
 def plot_dep_rho(num_servers, rhos, avg_wait_times):
+    """
+
+    """
     for idx_n in range(len(num_servers)):
         n = num_servers[idx_n]
         xdata = rhos
@@ -58,6 +67,28 @@ def plot_dep_rho(num_servers, rhos, avg_wait_times):
     plt.xlabel("Rho")
     plt.ylabel("Average wait time")
     plt.show()  
+
+def plot_dep_queue(num_servers, avg_wait_times_FIFO, avg_wait_times_SJFS):
+    """"
+    """"
+    labels = ["FIFO", "SJFS"]
+
+    for idx_n in range(len(num_servers)):
+        data = np.array([avg_wait_times_FIFO[idx_n], avg_wait_times_SJFS[idx_n]])
+
+        plt.title(f"Comparison of queue types using {num_servers[idx_n]} servers")
+        plt.xlabel("Number of servers")
+        plt.ylabel("Average wait time")
+
+        ax = plt.boxplot(data.T, patch_artist=True, labels=labels)
+
+        # fill with colors
+        colors = ['pink', 'lightblue']
+        for patch, color in zip(ax['boxes'], colors):
+            patch.set_facecolor(color)
+        plt.show()
+
+
 
 
 

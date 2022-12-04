@@ -17,13 +17,6 @@ class Servers(object):
         self.capacity = capacity
         self.servetime = None
 
-    def serve(self, name):
-        """
-        
-        """
-        servetime = random.expovariate(self.capacity)
-        yield self.env.timeout(servetime)
-
     def set_servetime(self):
         self.servetime = random.expovariate(self.capacity)
 

@@ -9,7 +9,7 @@ def exp_queue_position(num_servers, num_customers, wait_times_cust):
 def exp_dep_servers(num_servers, avg_wait_times):
     plotting.plot_dep_servers_box(num_servers, avg_wait_times)
 
-def exp_rho_dep(num_servers, num_simulations, num_customers, capacity):
+def exp_dep_rho(num_servers, num_simulations, num_customers, capacity):
 
     if len(num_servers) != 3:
         print("Please provide a list of 3 for the number of servers")
@@ -29,19 +29,24 @@ def exp_rho_dep(num_servers, num_simulations, num_customers, capacity):
     data_all = [data_n1, data_n2, data_n4]
     plotting.plot_dep_rho(num_servers, rhos, data_all)
 
+def exp_queue_dep(num_servers, avg_wait_times_FIFO, avg_wait_times_SJFS):
+    plotting.plot_dep_queue(num_servers, avg_wait_times_FIFO, avg_wait_times_SJFS)
+
+
+
 #Default variables
 num_servers = [1,2,4]
 num_simulations = 200
-num_customers = 20
+num_customers = 200
 capacity = 2
 arrival_rate = 1.9
 
 #Experiment to carry out
-avg_wait_times, wait_times_cust = simulate.run_simulation(num_servers, num_simulations, num_customers, capacity, arrival_rate)
+avg_wait_times_FIFO, wait_times_cust_FIFO = simulate.run_simulation(num_servers, num_simulations, num_customers, capacity, arrival_rate)
+avg_wait_times_FIFO = avg_wait_times_FIFO[:20]
 #exp_queue_position(num_servers, num_customers, wait_times_cust)
-exp_dep_servers(num_servers, avg_wait_times[:20])
-#exp_rho_dep(num_servers, num_simulations, num_customers, capacity)
-
-
+#exp_dep_servers(num_servers, avg_wait_times_FIFO)
+#exp_dep_rho(num_servers, num_simulations, num_customers, capacity)
 avg_wait_times_SJFS, _ = simulate.run_simulation(num_servers, num_simulations, num_customers, capacity, arrival_rate, "SJFS")
-exp_dep_servers(num_servers, avg_wait_times_SJFS[:20])
+avg_wait_times_SJFS = avg_wait_times_SJFS[:20]
+exp_queue_dep(num_servers, avg_wait_times_FIFO, avg_wait_times_SJFS)
