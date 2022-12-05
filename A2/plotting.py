@@ -5,7 +5,8 @@ import seaborn as sns
 
 def plot_dep_customers(num_servers, num_customers, wait_times_cust):
     """
-
+    Plot the dependency of the average waiting time of the count that the customer enters the queue
+    So the 1000th customer is the 1000th person that has entered that queue
     """
     for idx_n in range(len(num_servers)):
         n = num_servers[idx_n]
@@ -14,6 +15,7 @@ def plot_dep_customers(num_servers, num_customers, wait_times_cust):
 
         avg_ydata = [np.mean(data) for data in ydata]
 
+        # Calculate 95% confidence intervals
         ci = [st.t.interval(confidence=0.95, df=len(data)-1, loc=np.mean(data), scale=st.sem(data)) for data in ydata]
         ci_lower = [i[0] for i in ci]
         ci_higher = [i[1] for i in ci]  
@@ -32,7 +34,7 @@ def plot_dep_customers(num_servers, num_customers, wait_times_cust):
 
 def plot_dep_servers_box(num_servers, avg_wait_times):
     """
-
+    Plot boxplot of the average waiting time as a function of the number of servers
     """
     plt.title("Relation between number of servers and average wait time")
     plt.xlabel("Number of servers")
@@ -51,7 +53,7 @@ def plot_dep_servers_box(num_servers, avg_wait_times):
 
 def plot_dep_rho(num_servers, rhos, avg_wait_times):
     """
-
+    Plot a lineplot where the average wait time is a function of rho
     """
     for idx_n in range(len(num_servers)):
         n = num_servers[idx_n]
@@ -60,6 +62,7 @@ def plot_dep_rho(num_servers, rhos, avg_wait_times):
 
         avg_ydata = [np.mean(data) for data in ydata]
 
+        #  Calculate 95% confidence intervals
         ci = [st.t.interval(confidence=0.95, df=len(data)-1, loc=np.mean(data), scale=st.sem(data)) for data in ydata]
         ci_lower = [i[0] for i in ci]
         ci_higher = [i[1] for i in ci]  
@@ -78,6 +81,7 @@ def plot_dep_rho(num_servers, rhos, avg_wait_times):
 
 def plot_dep_queue_struct(num_servers, avg_wait_times_FIFO, avg_wait_times_SJFS):
     """
+    Plot 2 boxplots, one for the average waiting time of a FIFO queue and one of a SJFS queue
     """
     labels = ["FIFO", "SJFS"]
 
@@ -101,7 +105,7 @@ def plot_dep_queue_struct(num_servers, avg_wait_times_FIFO, avg_wait_times_SJFS)
 
 def plot_dep_queue_type(num_servers, avg_wait_times_m_m_n, avg_wait_times_m_d_n, avg_wait_times_lt, structure):
     """
-
+    Plot boxplots for the average waiting time depending on the service rate distributions
     """
     labels = ["m_m_n", "m_m_d", "long-tailed"]
 

@@ -1,6 +1,3 @@
-"""
-GIVE EXPLANATION OF WHAT THIS DOC DOES
-"""
 import random
 import simpy
 import numpy as np
@@ -9,7 +6,7 @@ import plotting
 
 class Servers(object):
     """
-    
+    A class for the servers that serve the customers
     """
     def __init__(self, env, num_servers, capacity):
         self.env = env
@@ -18,6 +15,9 @@ class Servers(object):
         self.servetime = None
 
     def set_servetime(self, queue_type):
+        """
+        Set a servetime based on the service rate distribution used
+        """
         if queue_type == "m_m_n":
             self.servetime = random.expovariate(self.capacity)
         if queue_type == "m_d_n":
@@ -31,42 +31,42 @@ class Servers(object):
 
 def customer(env, name, s, wait_times, queue_structure, queue_type):
     """
-
+    Function that simulates a customer standing in a queue and them being served
     """
     s.set_servetime(queue_type)
     servetime = s.servetime
 
+    # If the queue structure is SJFS, priority is based on low servetime
     if queue_structure == "SJFS":
         priority = servetime
     else:
         priority = None
 
+    # Stand in queue
     with s.machine.request(priority) as request:
         start_wait = env.now
-        #print('%s enters the at %.2f.' % (name, env.now))
         yield request
-        end_wait = env.now
-        #print('%s served at %.2f.' % (name, env.now))
-        wait_time = end_wait - start_wait
-        # Record witing time
-        wait_times.append(wait_time)
 
+        # Leave queue
+        end_wait = env.now
+        wait_time = end_wait - start_wait
+        wait_times.append(wait_time)
         yield env.timeout(servetime)
-        #print('%s leaves at %.2f.' % (name, env.now))
+
 
 
 def setup(env, num_servers, num_customers, capacity, arrival_rate, wait_times, queue_structure, queue_type):
     """
-
+    Setup the simulation by creating the servers and customers
     """
-    # Create the carwash
+    # Create the servers
     servers = Servers(env, num_servers, capacity)
 
     # Create n initial customers
     for i in range(num_servers):
         env.process(customer(env, 'Customer %d' % i, servers, wait_times, queue_structure, queue_type))
 
-    # Create more cars while the sicapacitylation is running
+    # Create more customers while the sicapacitylation is running
     for i in range(num_servers, num_customers):
         arrival_time = random.expovariate(arrival_rate)
         yield env.timeout(arrival_time)
@@ -76,7 +76,7 @@ def setup(env, num_servers, num_customers, capacity, arrival_rate, wait_times, q
 
 def run_simulation(num_servers, num_simulations, num_customers, capacity, arrival_rate, queue_structure = "FIFO", queue_type = "m_m_n"):
     """
-
+    Run simulation n times and return the average waiting times recorded for each simulation
     """
     avg_wait_times = np.empty((len(num_servers), num_simulations))
     wait_times_cust = []
@@ -85,9 +85,11 @@ def run_simulation(num_servers, num_simulations, num_customers, capacity, arriva
         for sim in range(num_simulations):
             wait_times = []
             arrival_rate_n = arrival_rate * num_servers[idx_n]
+
             # Create an environment and start the setup process
             env = simpy.Environment()
             env.process(setup(env, num_servers[idx_n], num_customers, capacity, arrival_rate_n, wait_times, queue_structure, queue_type))
+
             # Execute!
             env.run()
             avg_wait_times[idx_n][sim] = np.mean(wait_times)

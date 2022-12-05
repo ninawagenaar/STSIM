@@ -1,0 +1,41 @@
+Results for the experiment on influence number of servers
+Results T-test to see if mean n= 1 is greater than n=2
+Ttest_indResult(statistic=40.960604194023084, pvalue=7.1181453480344535e-307)
+Results T-test to see if mean n= 1 is greater than n=4
+Ttest_indResult(statistic=67.89027226515857, pvalue=0.0)
+
+Results for the experiment on queue structure
+Results T-test to see if mean FIFO is greater than mean SJFS for n = 1
+Ttest_indResult(statistic=63.75683831627457, pvalue=0.0)
+Results T-test to see if mean FIFO is greater than mean SJFS for n = 2
+Ttest_indResult(statistic=57.0214483020427, pvalue=0.0)
+Results T-test to see if mean FIFO is greater than mean SJFS for n = 4
+Ttest_indResult(statistic=55.30779881955995, pvalue=0.0)
+
+Results for the experiment on queue types using structure FIFO
+results to see if mean m_m_n queue is different from m_d_n queue for n = 1
+Ttest_indResult(statistic=39.918851705554, pvalue=1.3983862976002047e-293)
+results to see if mean m_m_n queue is different from m_d_n queue for n = 2
+Ttest_indResult(statistic=36.35435349051305, pvalue=2.807642223148561e-250)
+results to see if mean m_m_n queue is different from m_d_n queue for n = 4
+Ttest_indResult(statistic=35.40316244733387, pvalue=4.6581416132968095e-239)
+results to see if mean m_m_n queue is different from long-tailed queue for n = 1
+Ttest_indResult(statistic=-615.4631210146729, pvalue=0.0)
+results to see if mean m_m_n queue is different from long-tailed queue for n = 2
+Ttest_indResult(statistic=-615.4631210146729, pvalue=0.0)
+results to see if mean m_m_n queue is different from long-tailed queue for n = 4
+Ttest_indResult(statistic=-615.4631210146729, pvalue=0.0)
+
+Results for the experiment on queue types using structure SJFS
+results to see if mean m_m_n queue is different from m_d_n queue for n = 1
+Ttest_indResult(statistic=-45.3484891842338, pvalue=0.0)
+results to see if mean m_m_n queue is different from m_d_n queue for n = 2
+Ttest_indResult(statistic=-40.13832918686154, pvalue=2.631010568800958e-296)
+results to see if mean m_m_n queue is different from m_d_n queue for n = 4
+Ttest_indResult(statistic=-35.182935947460074, pvalue=1.7537240948213381e-236)
+results to see if mean m_m_n queue is different from long-tailed queue for n = 1
+Ttest_indResult(statistic=-45.0948199861398, pvalue=0.0)
+results to see if mean m_m_n queue is different from long-tailed queue for n = 2
+Ttest_indResult(statistic=-45.0948199861398, pvalue=0.0)
+results to see if mean m_m_n queue is different from long-tailed queue for n = 4
+Ttest_indResult(statistic=-45.0948199861398, pvalue=0.0)
