@@ -1,4 +1,4 @@
-import m_m_n as simulate
+import simulation as simulate
 import plotting
 import scipy.stats as stats
 
@@ -6,10 +6,16 @@ import scipy.stats as stats
 #First experiment: waiting time for customer number
 
 def exp_queue_position(num_servers, num_customers, wait_times_cust):
+    """
+    Experiment to see how the queue position affects the average waiting time
+    """
     plotting.plot_dep_customers(num_servers, num_customers, wait_times_cust)
 
 
 def exp_dep_servers(num_servers, avg_wait_times):
+    """
+    Experiment to see if the average waiting time is dependent on the number of servers
+    """
     plotting.plot_dep_servers_box(num_servers, avg_wait_times)
 
     print('')
@@ -21,7 +27,11 @@ def exp_dep_servers(num_servers, avg_wait_times):
     print("Results T-test to see if mean n= 1 is greater than n=4")
     print(stats.ttest_ind(avg_wait_times[0], avg_wait_times[2], alternative="greater"))
 
+
 def exp_dep_rho(num_servers, num_simulations, num_customers, capacity):
+    """
+    Experiment to see how the average waiting time depends on rho for different number of servers
+    """
 
     if len(num_servers) != 3:
         print("Please provide a list of 3 for number of servers")
@@ -42,6 +52,9 @@ def exp_dep_rho(num_servers, num_simulations, num_customers, capacity):
     plotting.plot_dep_rho(num_servers, rhos, data_all)
 
 def exp_dep_queue_struct(num_servers, avg_wait_times_FIFO, avg_wait_times_SJFS):
+    """
+    Experiment to see how the average waiting time depends on the queue structure
+    """
     plotting.plot_dep_queue_struct(num_servers, avg_wait_times_FIFO, avg_wait_times_SJFS)
 
     print('')
@@ -58,6 +71,9 @@ def exp_dep_queue_struct(num_servers, avg_wait_times_FIFO, avg_wait_times_SJFS):
 
 
 def exp_dep_queue_type(num_servers, avg_wait_times_m_m_n, avg_wait_times_m_d_n, avg_wait_times_lt, structure):
+    """"
+    Experiment to see how the average waiting time depends on the service rate distribution
+    """
     plotting.plot_dep_queue_type(num_servers, avg_wait_times_m_m_n, avg_wait_times_m_d_n, avg_wait_times_lt, structure)
 
     print('')
@@ -89,9 +105,9 @@ num_simulations = 2000
 num_customers = 4000
 capacity = 2
 arrival_rate = 1.9
+throwaway = 1000
 
-#Experiment to carry out
-throwaway = 2000
+# Get some initial results to limit the amount of dublicate computations needed for experiments
 
 avg_wait_times_FIFO_m_m_n, wait_times_cust_FIFO_m_m_n = simulate.run_simulation(num_servers, num_simulations, num_customers, capacity, arrival_rate)
 avg_wait_times_FIFO_m_m_n = avg_wait_times_FIFO_m_m_n[:throwaway]
@@ -107,6 +123,8 @@ avg_wait_times_FIFO_lt, _ = simulate.run_simulation(num_servers, num_simulations
 avg_wait_times_FIFO_lt = avg_wait_times_FIFO_lt[:throwaway]
 avg_wait_times_SJFS_lt, _ = simulate.run_simulation(num_servers, num_simulations, num_customers, capacity, arrival_rate, "SJFS", "m_d_n")
 avg_wait_times_SJFS_lt = avg_wait_times_SJFS_m_d_n[:throwaway]
+
+# Experiments to carry out
 
 # Question 2
 exp_queue_position(num_servers, num_customers, wait_times_cust_FIFO_m_m_n)
