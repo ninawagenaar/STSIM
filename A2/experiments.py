@@ -21,10 +21,6 @@ def exp_dep_servers(num_servers, avg_wait_times):
     print("Results T-test to see if mean n= 1 is greater than n=4")
     print(stats.ttest_ind(avg_wait_times[0], avg_wait_times[2], alternative="greater"))
 
-
-
-
-
 def exp_dep_rho(num_servers, num_simulations, num_customers, capacity):
 
     if len(num_servers) != 3:
