@@ -1,5 +1,6 @@
 import numpy as np
 import math
+import matplotlib.pyplot as plt
 
 # Calculates the average waiting time for a mmc queue using Adan and Resing (2002)
 def waittime_mmc(lam, mu, c):
@@ -17,7 +18,17 @@ def PIw(rho, c):
     return numerator / denominator
 
 if __name__ == "__main__":
+    min = 1
+    max = 100
+    c = np.arange(min, max)
+    averages = np.arange(min, max)
     lam = 0.9
     mu = 1
-    for i in range(1, 100):
-        print(i, waittime_mmc(lam, mu, i))
+    # for i in range(0, max-min):
+    #     averages[i] = waittime_mmc(c[i]*lam, mu, c[i])
+
+    # plt.plot(c, np.log(averages))
+    # plt.show()
+
+    for i in range(1, 10000):
+        print(i, waittime_mmc(i*lam, mu, i))
