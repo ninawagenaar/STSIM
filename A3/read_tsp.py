@@ -57,18 +57,17 @@ def read_problem_tsp(filename):
     with open(filename) as f:
         for line in f:
 
-            line.strip()
-            print(line)
-            print(line[0])
+            line = line.strip()
 
             if ":" in line: 
                 name, value = line.split(":")
-                value = value.strip()
                 name = name.strip()
+                value = value.strip()
                 variables[name] = value
 
             if line[0].isdigit():
                 node, xval, yval = line.split()
+                node = node.strip()
                 xval = xval.strip()
                 yval = yval.strip()
                 node_coord_section.append([int(node), int(xval), int(yval)]) 
