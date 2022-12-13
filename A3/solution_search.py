@@ -33,7 +33,7 @@ class search_alg:
             cost += tspProblem.distances[node1-1, node2-1]
         return cost
 
-    def simulatedannealing(self, tspProblem, max_iter, probability, temperature):
+    def simulatedannealing(self, tspProblem, max_iter, T0):
 
         # Initialize randomn solution
         self.initialize_circuit(tspProblem)
@@ -61,15 +61,16 @@ class search_alg:
             # Swap the selected edges
             potential_circuit = self.two_opt(i, k)
             potential_cost = self.get_cost(potential_circuit, tspProblem)
-            if potential_cost < self.cost:
+            delta = potential_cost - self.cost
+            Tk = T0 / (1+np.log(1+iter))
+            if delta < 0:
                 self.circuit = potential_circuit
                 self.cost = potential_cost
-            elif random.random() < probability: 
-                self.circuit = potential_circuit
-                self.cost = potential_cost
-
-            # Reduce probability    
-            probability = probability * temperature
+            elif delta >= 0: 
+                probability = math.exp( -delta / Tk)
+                if random.random() < probability:
+                    self.circuit = potential_circuit
+                    self.cost = potential_cost
 
             # Save result iteration 
             self.history_cost[iter+1] = self.cost

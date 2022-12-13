@@ -4,14 +4,14 @@ import read_tsp as tsp
 import solution_search as sol
 import plotting as plotting
 
-def run_simulations(tspProblem, simulations, max_iter, probability, temperature):
+def run_simulations(tspProblem, simulations, max_iter, temperature):
     cost_over_iter = []
     for simulation in range(simulations):
 
         print("simulation:", simulation)
 
         search_alg_sa = sol.search_alg("simulatedannealing", tspProblem.dimension, max_iter)
-        search_alg_sa.simulatedannealing(tspProblem, max_iter, probability, temperature)
+        search_alg_sa.simulatedannealing(tspProblem, max_iter, temperature)
         cost_over_iter.append(search_alg_sa.history_cost)
 
     cost_over_iter = np.asarray(cost_over_iter)
@@ -26,8 +26,7 @@ def main():
     max_iter = 10000
     simulations = 20
     temperature = 0.9
-    probability = 0.3
-    run_simulations(tspProblem, simulations, max_iter, probability, temperature)
+    run_simulations(tspProblem, simulations, max_iter, temperature)
 
 
 if __name__ == "__main__":
