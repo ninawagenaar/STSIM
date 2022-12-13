@@ -11,11 +11,16 @@ class tspProblem:
         self.distances = self.get_distance_matrix()
 
     def get_distance_matrix(self):
+        '''
+        Initialize euclidean distance matrix
+        '''
         distances = np.empty((self.dimension, self.dimension))
         for i in self.node_coord_section[:,0]:
             for j in self.node_coord_section[:,0]:
+                # Distance is zero for a node to itself
                 if i == j:
                     distances[i-1][j-1] = 0
+                # Contains some dublication, do we want this gone?
                 else:
                     x1 = self.node_coord_section[i-1,1]
                     y1 = self.node_coord_section[i-1,2]
@@ -30,6 +35,10 @@ class tspProblem:
                 
 
     def plot_problem(self):
+        '''
+        Make plot of problems
+        Shows where all the nodes lie
+        '''
         plt.scatter(self.node_coord_section[:,1], self.node_coord_section[:,2])
         plt.xlabel("X coordinate")
         plt.ylabel("Y coordinate")
@@ -39,22 +48,32 @@ class tspProblem:
 
 
 def read_problem_tsp(filename):
+    '''
+    Read in problem and initialize an object of the problem class
+    '''
     variables = {}
     node_coord_section = []
 
     with open(filename) as f:
         for line in f:
 
-            if " : " in line: 
-                name, value = line.split(" : ")
-                value = value.rstrip()
+            line.strip()
+            print(line)
+            print(line[0])
+
+            if ":" in line: 
+                name, value = line.split(":")
+                value = value.strip()
+                name = name.strip()
                 variables[name] = value
 
             if line[0].isdigit():
-                node, xval, yval = line.split(" ")
-                yval = yval.rstrip()
+                node, xval, yval = line.split()
+                xval = xval.strip()
+                yval = yval.strip()
                 node_coord_section.append([int(node), int(xval), int(yval)]) 
-
+    
     node_coord_section = np.asarray(node_coord_section)
+    print(len(node_coord_section[:,0]))	
 
     return tspProblem(variables, node_coord_section)

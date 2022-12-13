@@ -13,13 +13,15 @@ def run_simulations(tspProblem, simulations, max_iter, temperature):
         search_alg_sa = sol.search_alg("simulatedannealing", tspProblem.dimension, max_iter)
         search_alg_sa.simulatedannealing(tspProblem, max_iter, temperature)
         cost_over_iter.append(search_alg_sa.history_cost)
+        print("final result", search_alg_sa.history_cost[-1])
 
     cost_over_iter = np.asarray(cost_over_iter)
     plotting.plot_cost_over_iter(cost_over_iter)
     
 
 def main():
-    filename = 'eil51.tsp.txt'
+    #filename = 'eil51.tsp.txt'
+    filename = 'a280.tsp.txt'
     tspProblem = tsp.read_problem_tsp(filename) 
     #problem.plot_problem()
 
