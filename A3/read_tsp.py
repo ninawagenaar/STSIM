@@ -1,6 +1,8 @@
+from asyncore import read
 import matplotlib.pyplot as plt
 import numpy as np
 import math
+plt.rcParams['font.size'] = '16'
 
 class tspProblem:
 
@@ -35,11 +37,8 @@ class tspProblem:
                 
 
     def plot_problem(self):
-        '''
-        Make plot of problems
-        Shows where all the nodes lie
-        '''
-        plt.scatter(self.node_coord_section[:,1], self.node_coord_section[:,2])
+        plt.figure(figsize=(4, 4), layout="tight")
+        plt.scatter(self.node_coord_section[:,1], self.node_coord_section[:,2], s=10)
         plt.xlabel("X coordinate")
         plt.ylabel("Y coordinate")
         plt.title("Vizualization of nodes")
@@ -76,3 +75,13 @@ def read_problem_tsp(filename):
     print(len(node_coord_section[:,0]))	
 
     return tspProblem(variables, node_coord_section)
+
+if __name__ == "__main__":
+    config51 = read_problem_tsp("eil51.tsp.txt")
+    config51.plot_problem()
+
+    config280 = read_problem_tsp("a280.tsp.txt")
+    config280.plot_problem()
+    
+    config442 = read_problem_tsp("pcb442.tsp.txt")
+    config442.plot_problem()

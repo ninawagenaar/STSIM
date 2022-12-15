@@ -30,5 +30,5 @@ if __name__ == "__main__":
     # plt.plot(c, np.log(averages))
     # plt.show()
 
-    for i in range(1, 10000):
+    for i in range(1, 100/00):
         print(i, waittime_mmc(i*lam, mu, i))
