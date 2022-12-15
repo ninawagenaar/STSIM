@@ -21,7 +21,7 @@ def run_simulations(tspProblem, simulations, max_iter, temperature):
 
 def main():
     #filename = 'eil51.tsp.txt'
-    filename = 'a280.tsp.txt'
+    filename = 'pcb442.tsp.txt'
     tspProblem = tsp.read_problem_tsp(filename) 
     #problem.plot_problem()
 

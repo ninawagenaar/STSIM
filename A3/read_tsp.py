@@ -69,7 +69,7 @@ def read_problem_tsp(filename):
                 node = node.strip()
                 xval = xval.strip()
                 yval = yval.strip()
-                node_coord_section.append([int(node), int(xval), int(yval)]) 
+                node_coord_section.append([int(float(node)), int(float(xval)), int(float(yval))]) 
     
     node_coord_section = np.asarray(node_coord_section)
     print(len(node_coord_section[:,0]))	
