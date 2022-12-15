@@ -36,9 +36,9 @@ class tspProblem:
         return distances
                 
 
-    def plot_problem(self):
+    def plot_problem(self, pointsize=10):
         plt.figure(figsize=(4, 4), layout="tight")
-        plt.scatter(self.node_coord_section[:,1], self.node_coord_section[:,2], s=10)
+        plt.scatter(self.node_coord_section[:,1], self.node_coord_section[:,2], s=pointsize)
         plt.xlabel("X coordinate")
         plt.ylabel("Y coordinate")
         plt.title("Vizualization of nodes")
@@ -81,7 +81,7 @@ if __name__ == "__main__":
     config51.plot_problem()
 
     config280 = read_problem_tsp("a280.tsp.txt")
-    config280.plot_problem()
+    config280.plot_problem(pointsize=6)
     
     config442 = read_problem_tsp("pcb442.tsp.txt")
-    config442.plot_problem()
+    config442.plot_problem(pointsize=4)
