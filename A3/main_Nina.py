@@ -1,7 +1,30 @@
+from re import T
 import matplotlib.pyplot as plt
 plt.rcParams['font.size'] = '14'
 import numpy as np
 
+def lundy_mees_cooling(Ti, a, b):
+        if (a + b * Ti) > Ti:
+            print("a and b are not selected properly")
+            return ValueError
+        else:
+            return Ti / (a + b * Ti)
+
+def linear_cooling1(Ti, a):
+        Tnew = Ti - a
+
+        if Tnew <= 0:
+            return 0
+        else:
+            return Tnew
+
+def linear_cooling2(T0, iter, a):
+        Tnew = T0 - iter*a
+
+        if Tnew <= 0:
+            return 0
+        else:
+            return Tnew
 
 class tspProblem:
 
@@ -46,9 +69,37 @@ def read_files_tsp(filename):
             
 
 def main():
-    filename = 'eil51.tsp.txt'
-    problem = read_files_tsp(filename) 
-    problem.plot_problem()
+    # filename = 'eil51.tsp.txt'
+    # problem = read_files_tsp(filename) 
+    # problem.plot_problem()
+    T = 400
+    iters = 1000
+    a = T/iters
+    b = a
+    
+    x = np.arange(iters)
+    y = np.empty(iters)
+
+    for i in range(iters):
+        y[i] = T
+        T = lundy_mees_cooling(T, a, b)
+    
+    plt.plot(x, y)
+    plt.show()
+
+    T = 400
+    a = T/iters
+    for i in range(iters):
+        y[i] = T
+        T = linear_cooling1(T, a)
+    
+    plt.plot(x, y)
+    plt.show()
+
+    
+
+
 
 if __name__ == "__main__":
     main()
+

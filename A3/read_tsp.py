@@ -2,7 +2,7 @@ from asyncore import read
 import matplotlib.pyplot as plt
 import numpy as np
 import math
-plt.rcParams['font.size'] = '16'
+plt.rcParams['font.size'] = '12'
 
 class tspProblem:
 

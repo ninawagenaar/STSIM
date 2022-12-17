@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy.stats as st
+plt.rcParams['font.size'] = '12'
 
 def plot_cost_over_iter(cost_over_iter):
     # Get x and y

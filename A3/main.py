@@ -3,6 +3,7 @@ import numpy as np
 import read_tsp as tsp
 import solution_search as sol
 import plotting as plotting
+plt.rcParams['font.size'] = '12'
 
 def run_simulations(tspProblem, simulations, max_iter, temperature):
     cost_over_iter = []
@@ -23,7 +24,7 @@ def main():
     #filename = 'eil51.tsp.txt'
     filename = 'pcb442.tsp.txt'
     tspProblem = tsp.read_problem_tsp(filename) 
-    #problem.plot_problem()
+    # problem.plot_problem() #default size of point is 10, use pointsize=X for another size.
 
     max_iter = 10000
     simulations = 20

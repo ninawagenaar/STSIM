@@ -33,6 +33,35 @@ class search_alg:
             cost += tspProblem.distances[node1-1, node2-1]
         return cost
 
+    # Even kijken welke implementatie beter is voor in het algoritme
+    def linear_cooling1(self, Ti, a):
+        Tnew = Ti - a
+
+        if Tnew <= 0:
+            return 0
+        else:
+            return Tnew
+
+    def linear_cooling2(self, T0, iter, a):
+        Tnew = T0 - iter*a
+
+        if Tnew <= 0:
+            return 0
+        else:
+            return Tnew
+
+    def lundy_mees_cooling(self, Ti, a, b):
+        if (a + b * Ti) < Ti:
+            print("a and b are not selected properly")
+            return ValueError
+        else:
+            return Ti / (a + b * Ti)
+
+
+    # TODO: iets toevoegen waardoor er ipv 1 een i aantal oplossingen
+    # gemaakt wordt voor elke temperatuur.
+    # de lengte van de markovchain is dan n*i
+    # waarbij n maximale iteraties is.
     def simulatedannealing(self, tspProblem, max_iter, T0):
 
         # Initialize randomn solution
@@ -62,6 +91,8 @@ class search_alg:
             potential_circuit = self.two_opt(i, k)
             potential_cost = self.get_cost(potential_circuit, tspProblem)
             delta = potential_cost - self.cost
+
+            # Update temperature using function
             Tk = T0 / (1+np.log(1+iter))
             if delta < 0:
                 self.circuit = potential_circuit
