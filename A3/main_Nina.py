@@ -1,30 +1,36 @@
 from re import T
 import matplotlib.pyplot as plt
-plt.rcParams['font.size'] = '14'
+plt.rcParams['font.size'] = '16'
 import numpy as np
 
-def lundy_mees_cooling(Ti, a, b):
-        if (a + b * Ti) > Ti:
-            print("a and b are not selected properly")
-            return ValueError
-        else:
-            return Ti / (a + b * Ti)
 
-def linear_cooling1(Ti, a):
-        Tnew = Ti - a
+def plot_cooling(T0, max_iter, cooling_scheme='linear'):
+    temperatures = np.zeros(max_iter+1)
+    temperatures[0] = T0
 
-        if Tnew <= 0:
-            return 0
-        else:
-            return Tnew
+    if cooling_scheme == 'linear':
+        c = temperatures[0] / max_iter
+        for i in range(1, max_iter+1):
+            temperatures[i] = temperatures[i-1] - c
 
-def linear_cooling2(T0, iter, a):
-        Tnew = T0 - iter*a
+    elif cooling_scheme == 'logarithmic':
+        for i in range(1, max_iter+1):
+            temperatures[i] = temperatures[0] / (1+np.log(1+i))
+        
+    elif cooling_scheme == 'quadratic':
+        a = temperatures[0] / max_iter**2
+        b = 2* -temperatures[0] / max_iter
+        c = temperatures[0]
+        for i in range(1, max_iter+1):
+            temperatures[i] = a * i**2 + b*i + c
 
-        if Tnew <= 0:
-            return 0
-        else:
-            return Tnew
+    plt.figure(figsize=(5, 5), layout="tight")
+    plt.plot(temperatures)
+    plt.xlabel("Iteration")
+    plt.ylabel("Temperature")
+    plt.title("The {} \n cooling schedule".format(cooling_scheme))
+    plt.savefig("figs/temperature_{0}cooling_{1}T0".format(cooling_scheme, T0))
+    plt.show()
 
 class tspProblem:
 
@@ -72,32 +78,9 @@ def main():
     # filename = 'eil51.tsp.txt'
     # problem = read_files_tsp(filename) 
     # problem.plot_problem()
-    T = 400
-    iters = 1000
-    a = T/iters
-    b = a
-    
-    x = np.arange(iters)
-    y = np.empty(iters)
-
-    for i in range(iters):
-        y[i] = T
-        T = lundy_mees_cooling(T, a, b)
-    
-    plt.plot(x, y)
-    plt.show()
-
-    T = 400
-    a = T/iters
-    for i in range(iters):
-        y[i] = T
-        T = linear_cooling1(T, a)
-    
-    plt.plot(x, y)
-    plt.show()
-
-    
-
+    cooling_schedules = ['logarithmic', 'linear', 'quadratic']
+    for schedule in cooling_schedules:
+        plot_cooling(500, 10000, cooling_scheme=schedule)
 
 
 if __name__ == "__main__":

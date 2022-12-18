@@ -21,10 +21,14 @@ def run_simulations(tspProblem, simulations, max_iter, temperature):
     
 
 def main():
-    #filename = 'eil51.tsp.txt'
-    filename = 'pcb442.tsp.txt'
+    # These lists enable us to iterate through these files if needed
+    files = ['eil51.tsp.txt', 'a280.tsp.txt', 'pcb442.tsp.txt']
+    cooling_schedules = ['logarithmic', 'linear', 'quadratic']
+    filename = files[0]
     tspProblem = tsp.read_problem_tsp(filename) 
     # problem.plot_problem() #default size of point is 10, use pointsize=X for another size.
+
+
 
     max_iter = 10000
     simulations = 20
