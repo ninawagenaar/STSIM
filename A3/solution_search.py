@@ -2,15 +2,17 @@ import numpy as np
 import read_tsp as tsp
 import random
 import math
+import matplotlib.pyplot as plt
 
 class search_alg:
 
     # a is the scaling constant for T0
-    def __init__(self, name, length, max_iter, a=1):
+    def __init__(self, name, length, max_iter, a=0.1, cooling_scheme='logarithmic'):
         self.name = name 
-        self.length = length,
+        self.length = length
         self.max_iter = max_iter
         self.a = a
+        self.cooling_scheme = cooling_scheme
         self.circuit = None
         self.current_cost = None
         self.history_cost = np.zeros(max_iter+1)
@@ -22,33 +24,38 @@ class search_alg:
         circuit = tspProblem.node_coord_section[:,0]
         random.shuffle(circuit)
         self.circuit = circuit
-        self.temperatures[0] = self.a * self.get_cost(circuit, tspProblem)
-        print(self.temperatures[0])
+        
 
     # Fills the temperatures array with temperatures at each iteration i
     # purpose: save time, especially with logarithmic cooling
-    def get_temperatures(self, cooling_scheme='linear'):
+    def get_temperatures(self):
 
-        if cooling_scheme == 'linear':
+        if self.cooling_scheme == 'linear':
             c = self.temperatures[0] / self.max_iter
             for i in range(1, self.max_iter+1):
                 self.temperatures[i] = self.temperatures[i-1] - c
 
-        elif cooling_scheme == 'logarithmic':
+        elif self.cooling_scheme == 'logarithmic':
             for i in range(1, self.max_iter+1):
                 self.temperatures[i] = self.temperatures[0] / (1+np.log(1+i))
             
-        elif cooling_scheme == 'quadratic':
-            a = self.temperatures[0] / self.max_iter**2
+        elif self.cooling_scheme == 'quadratic':
+            aa = self.temperatures[0] / self.max_iter**2
             b = 2* -self.temperatures[0] / self.max_iter
             c = self.temperatures[0]
             for i in range(1, self.max_iter+1):
-                self.temperatures[i] = a * i**2 + b*i + c
+                self.temperatures[i] = aa * i**2 + b*i + c
 
         else:
             raise ValueError("Cooling Scheme incorrectly provided: try 'linear', 'logarithmic' or 'quadratic'. ")
 
-    #     return True
+        # plt.figure(figsize=(5, 5), layout="tight")
+        # plt.plot(self.temperatures)
+        # plt.xlabel("Iteration")
+        # plt.ylabel("Temperature")
+        # plt.title("The {} \n cooling schedule".format(self.cooling_scheme))
+        # # plt.savefig("figs/temperature_{0}cooling_{1}T0".format(self.cooling_scheme, self.temperatures[0]))
+        # plt.show()
 
     def two_opt(self, i, k):
         new_circuit = np.zeros(self.length)
@@ -70,11 +77,16 @@ class search_alg:
     # de lengte van de markovchain is dan n*i
     # waarbij n maximale iteraties is.
 
-    def simulatedannealing(self, tspProblem, max_iter, T0):
+    def simulatedannealing(self, tspProblem, max_iter):
 
         # Initialize randomn solution
         self.initialize_circuit(tspProblem)
         self.cost = self.get_cost(self.circuit, tspProblem)
+        # print(self.cost)
+
+        # T0 aanmaken met self.cost*a
+        self.temperatures[0] = self.a * self.cost
+        self.get_temperatures()
 
         # Save initial cost
         self.history_cost[0] = self.cost
@@ -104,18 +116,21 @@ class search_alg:
             # Tk = T0 / (1+np.log(1+iter))
             
             # I updated this to an array with the temperatures at each iter
-            self.temperatures
+            
             if delta < 0:
                 self.circuit = potential_circuit
                 self.cost = potential_cost
             elif delta >= 0: 
-                probability = math.exp( -delta / Tk)
+                probability = math.exp( -delta / self.temperatures[iter])
                 if random.random() < probability:
                     self.circuit = potential_circuit
                     self.cost = potential_cost
 
             # Save result iteration 
             self.history_cost[iter+1] = self.cost
+            
+        self.localmin = np.min(self.history_cost)
+
 
             
 
