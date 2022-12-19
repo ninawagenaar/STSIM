@@ -2,6 +2,7 @@ from asyncore import read
 import matplotlib.pyplot as plt
 import numpy as np
 import math
+from scipy.spatial import distance
 plt.rcParams['font.size'] = '12'
 
 class tspProblem:
@@ -33,6 +34,7 @@ class tspProblem:
                     coor_node2 = (x2, y2)
 
                     distances[i-1][j-1] = math.dist(coor_node1, coor_node2)
+                    distances[i-1][j-1] =  distance.euclidean(coor_node1, coor_node2)
         return distances
                 
 
