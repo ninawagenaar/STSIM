@@ -28,7 +28,7 @@ def plot_cooling(T0, max_iter, cooling_scheme='linear'):
             for i in range(1, max_iter+1):
                 temperatures[i] = a * i**2 + b*i + c
 
-        plt.plot(temperatures, label="T0 = {}".format(round(T0*aa, 1)))
+        plt.plot(temperatures, label="a = {}".format(aa))
         
     plt.xlabel("Iteration")
     plt.ylabel("Temperature")
