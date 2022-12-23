@@ -45,7 +45,7 @@ class tspProblem:
         plt.ylabel("Y coordinate")
         plt.title("Vizualization of nodes")
         plt.grid()
-        plt.show()
+        plt.savefig("figs/problem{0}".format(self.dimension))
 
 
 def read_problem_tsp(filename):
@@ -77,13 +77,3 @@ def read_problem_tsp(filename):
     # print(len(node_coord_section[:,0]))	
 
     return tspProblem(variables, node_coord_section)
-
-if __name__ == "__main__":
-    config51 = read_problem_tsp("eil51.tsp.txt")
-    config51.plot_problem()
-
-    config280 = read_problem_tsp("a280.tsp.txt")
-    config280.plot_problem(pointsize=6)
-    
-    config442 = read_problem_tsp("pcb442.tsp.txt")
-    config442.plot_problem(pointsize=4)
